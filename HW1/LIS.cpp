@@ -1,4 +1,10 @@
 // Longest Increasing Subsequence
+// Used help from GfG
+/*
+5
+21 3 33 4 88
+>>>3
+*/
 #include <string>
 #include <vector>
 #include <sstream>
@@ -6,25 +12,31 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-typedef struct
+int lis(int *array, int n)
 {
-    int min = 29999999;
-    int num=1;
-} subsequence;
+    int lis_memo[n];
+    for (int i = 0; i < n; i++)
+        lis_memo[i] = 1;
 
-subsequence lis(int *array, int i, subsequence *subs)
-{
-    if (subs[i + 1].min != 29999999){
-        if (array[i] < subs[i + 1].min)
+    for (int i = 1; i < n; i++)
+    {
+        lis_memo[i] = 1;
+        for (int j = 0; j < i; j++)
         {
-            subs[i].min = array[i];
-            subs[i].num++;
-            return lis(array, i - 1, subs);
+            if (array[j] < array[i])
+            {
+                if (lis_memo[j] + 1 > lis_memo[i])
+                {
+                    lis_memo[i] = lis_memo[j] + 1;
+                }
+            }
         }
     }
-    if (i == sizeof(subs)/sizeof(subs[0])-1){
-        subs[i].min = array[i];
-    }
+    long int max = -1000000000;
+    for (int i = 0; i < n; i++)
+        if (max < lis_memo[i])
+            max = lis_memo[i];
+    return max;
 }
 
 int main()
@@ -33,10 +45,7 @@ int main()
     cin >> n;
     int arr[n];
     for (int i = 0; i < n; i++)
-        cin >> arr[n];
-
-    subsequence subseq[n];
-
-    cout << lis(arr, 0, subseq).min;
+        cin >> arr[i];
+    cout << lis(arr, n);
     return 0;
 }
