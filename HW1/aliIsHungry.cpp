@@ -5,8 +5,14 @@
 #include <iterator>
 #include <bits/stdc++.h>
 #include <ctime>
-
 using namespace std;
+
+int max(int s1, int s2)
+{
+    if (s1 < s2)
+        return s2;
+    return s1;
+}
 
 double find_max_gain(int n, double line1[], double line2[], int p)
 {
