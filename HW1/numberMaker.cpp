@@ -10,8 +10,8 @@
 
 using namespace std;
 // int memo[100000];
-vector<int> memo(100000, 0);
-int coin_change(int target, int n, int nums[])
+vector< unsigned int> memo(100000, 0);
+unsigned int coin_change(int target, int n, int nums[])
 {
     // cout<<"called func for( "<<target<<" )\n";
     // if (memo[target] != 0)
@@ -37,12 +37,13 @@ int coin_change(int target, int n, int nums[])
     //     return 0;
 
     memo[0] = 1;
-    for (int i = 1; i < target; i++)
+    for (int i = 1; i <= target; i++)
     {
         for (int j = 0; j < n; j++)
         {
             if (nums[j] <= i)
             {
+                // cout<<" i: "<<i<<" nums[j]: "<<nums[j]<<endl;
                 memo[i] += memo[i - nums[j]];
             }
         }
@@ -61,10 +62,10 @@ int main()
     cin >> target;
     // for (int i=0; i<100000; i++)
     //     memo[i]= -1
-    int res = coin_change(target, n, numbs);
-    cout <<res<<' '<<memo[target]<<endl;
-    for (int i=0; i<10; i++)
-        cout <<i<<":"<<memo[i]<<"  ";
-    cout << memo[target];
+    unsigned int res = coin_change(target, n, numbs);
+    // cout <<res<<' '<<memo[target]<<endl;
+    // for (int i=0; i<10; i++)
+    //     cout <<i<<":"<<memo[i]<<"  ";
+    cout <<res;
     return 0;
 }
