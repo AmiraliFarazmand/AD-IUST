@@ -66,6 +66,9 @@ int main()
     // cout <<res<<' '<<memo[target]<<endl;
     // for (int i=0; i<10; i++)
     //     cout <<i<<":"<<memo[i]<<"  ";
-    cout <<res;
+    if (res != 0)
+        cout << res;
+    else    
+        cout <<"Empty";
     return 0;
 }

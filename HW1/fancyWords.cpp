@@ -16,8 +16,6 @@ int main()
     str = str.insert(n, "%");
     str = str.insert(0, "%");
     unsigned int first_smalls[n + 2] = {}, last_caps[n + 2] = {};
-    // vector <int> first_smalls(n+2, 0);
-    // vector <int> last_caps(n+2, 0 );
     for (int i = 1; i <= n; i++)
     {
         first_smalls[i] = first_smalls[i - 1];
@@ -35,12 +33,12 @@ int main()
             min_change = first_smalls[i]+last_caps[i];
     }
     cout<<min_change-1<<endl;
-    // for (int i =0;i<n+2;i++)
-    //     cout<<str[i]<<first_smalls[i]<<last_caps[i]<<endl;
+    for (int i =0;i<n+2;i++)
+        cout<<last_caps[i];
 
     return 0;
 }
 // PRuvetSTAaYA
 // 001234000100
 // 210000321021
-// heklkoijijjiojijioj
+// // heklkoijijjiojijioj
