@@ -1,3 +1,5 @@
+// Minimum number of coins that make a given value.
+// Solved by using help from GFG.
 #include <string>
 #include <vector>
 #include <sstream>
@@ -9,40 +11,25 @@ using lolint = long long int;
 using namespace std;
 typedef vector<vector<lolint>> Matrix;
 
-vector<int> nums(100000, -1);
+vector<int> nums(100000, 1000000);
 
-lint find_min(int num, vector<lint> coins, int n)
+lint find_min(int target, vector<lint> coins, int n)
 {
-    // cout<<num<<" called"<<endl;
-    if (nums[num] > -1)
+    nums[0] = 0;
+    for (int i = 1; i <= target; i++)
     {
-        return nums[num];
-    }
-    if (num == 0)
-    {
-        return 0;
-    }
-
-        lint min_nums = 10000000;
-    for (int i = 0; i < n; i++)
-    {
-        lint temp = 10000000;
-        // cout << "?";
-        if (num >= coins[i])
+        for (int j = 0; j < n; j++)
         {
-            lint temp2 = find_min(num % coins[i], coins, n);
-            // lint temp3 = find_min(num / coins[i], coins, n);
-            if ( temp2 != -2)
-                temp = floor(num / coins[i])+temp2;
-            else
-                temp =10000000;
+            if (coins[j] <= i)
+            {
+            int remainders_min = nums[i - coins[j]];
+            if (remainders_min != 1000000)
+                if (remainders_min +1< nums[i])
+                    nums[i] = remainders_min+1;
+            }
         }
-        if (temp < min_nums)
-            min_nums = temp;
     }
-    if (min_nums != 10000000)   
-        return nums[num] =min_nums ;//( min_nums ? (min_nums != 10000000) : 0);
-    else return nums[num] =  -2 ;
+    return nums[target];
 }
 
 int main()
@@ -53,13 +40,12 @@ int main()
     for (int i = 0; i < n; i++)
         cin >> coins[i];
     sort(coins.begin(), coins.end(), greater<int>());
-    // cout << "##";
     lint res = find_min(v, coins, n);
-    if (res>=0)
-        cout << res<< endl;
-    else cout << -1<< endl;
+    if (res >= 0 && res!= 1000000)
+        cout << res << endl;
+    else
+        cout << -1 << endl;
     // cout<<-1;
-    // cout << "##";
     // for (int i = 0; i < v + 1; i++)
     //     cout << i<<' '<< nums[i] << endl;
 }
