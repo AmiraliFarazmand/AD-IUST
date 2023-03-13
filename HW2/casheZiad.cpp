@@ -19,12 +19,12 @@ int find_min(vector<int> tiles, int target, int num_tiles)
     {
         for (int j = 0; j < target + 1; j++)
         {
-            int length = tiles[i - 1];
-            for (int k = 0; k <= length; k++)
+            int coin_value = tiles[i - 1];
+            for (int k = 0; k <= coin_value; k++)
             {
                 int temp = 1000000000;
                 if (j >= (k * k))
-                    temp = memo[i - 1][j - k * k] + pow((length - k), 2);
+                    temp = memo[i - 1][j - k * k] + pow((coin_value - k), 2);
                 memo[i][j] = min(memo[i][j], temp);
             }
         }
@@ -33,7 +33,7 @@ int find_min(vector<int> tiles, int target, int num_tiles)
     // for (int i = 0; i < num_tiles + 1; i++)
     // {
     //     for (int j = 0; j < target + 1; j++)
-    //         cout<<setfill('0')<<setw(6)<< memo[i][j] << ' ';
+    //         cout<<setfill('0')<<setw(7)<< memo[i][j] << ' ';
     //     cout << endl;
     // }
 
