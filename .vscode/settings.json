@@ -1,6 +1,10 @@
 {
   "files.associations": {
     "*.ejs": "html",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "vector": "cpp",
+    "ctime": "cpp",
+    "cmath": "cpp",
+    "iomanip": "cpp"
   }
 }

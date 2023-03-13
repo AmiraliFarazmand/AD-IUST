@@ -1,5 +1,5 @@
-// Minimum Coin Change problem.
-// Used help from GFG.
+// Minimum number of coins that make a given value.
+// Solved by using help from GFG.
 #include <string>
 #include <vector>
 #include <sstream>
@@ -11,25 +11,25 @@ using lolint = long long int;
 using namespace std;
 typedef vector<vector<lolint>> Matrix;
 
-vector<int> nums(100000, -1);
+vector<int> nums(100000, 1000000);
 
-lint find_min(int num, vector<lint> coins, int target)
+lint find_min(int target, vector<lint> coins, int n)
 {
-    if (target == 0)
-        return 0;
-    int temp_min = 1000000;
-    for (int i = 0; i < num; i++)
+    nums[0] = 0;
+    for (int i = 1; i <= target; i++)
     {
-        if (target >= coins[i])
+        for (int j = 0; j < n; j++)
         {
-            int remainders_num = find_min(num, coins, target - coins[i]);
-            if (remainders_num != 1000000 && remainders_num + 1 < temp_min)
+            if (coins[j] <= i)
             {
-                temp_min = remainders_num + 1;
+            int remainders_min = nums[i - coins[j]];
+            if (remainders_min != 1000000)
+                if (remainders_min +1< nums[i])
+                    nums[i] = remainders_min+1;
             }
         }
     }
-    return temp_min;
+    return nums[target];
 }
 
 int main()
@@ -40,14 +40,12 @@ int main()
     for (int i = 0; i < n; i++)
         cin >> coins[i];
     sort(coins.begin(), coins.end(), greater<int>());
-    // cout << "##";
-    lint res = find_min(n, coins, v);
-    if (res >= 0)
+    lint res = find_min(v, coins, n);
+    if (res >= 0 && res!= 1000000)
         cout << res << endl;
     else
         cout << -1 << endl;
     // cout<<-1;
-    // cout << "##";
     // for (int i = 0; i < v + 1; i++)
     //     cout << i<<' '<< nums[i] << endl;
 }
