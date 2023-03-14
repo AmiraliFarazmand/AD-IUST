@@ -5,6 +5,9 @@
     "vector": "cpp",
     "ctime": "cpp",
     "cmath": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "iostream": "cpp",
+    "*.tcc": "cpp",
+    "bitset": "cpp"
   }
 }

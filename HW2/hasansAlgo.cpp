@@ -7,13 +7,14 @@
 #include <iterator>
 #include <bits/stdc++.h>
 #include <ctime>
+#define NUM 128
 #define MAX_NUM 99999999
 using lint = long int;
 using lolint = long long int;
 using namespace std;
 typedef vector<vector<int>> Matrix;
 
-int optimal_merges_cost(vector<int> &numbers, int n)
+long optimal_merges_cost(vector<int> &numbers, int n)
 {
     int dist, indx1, indx2, k;
 
@@ -22,11 +23,11 @@ int optimal_merges_cost(vector<int> &numbers, int n)
         return 0;
     }
 
-    vector<vector<int>> dp_table(n + 1, vector<int>(n + 1  , MAX_NUM));
+    vector<vector<long>> dp_table(NUM, vector<long>(NUM  , MAX_NUM));
     for (int i = 1; i <= n; i++)
         dp_table[i][i] = 0;
 
-    vector<int> prefix_sum(n + 1, 0);
+    vector<long> prefix_sum(NUM, 0);
     // fill prefix_sum
     for (int indx1 = 1; indx1 <= n; indx1++)
     {
@@ -42,7 +43,7 @@ int optimal_merges_cost(vector<int> &numbers, int n)
             indx2 = indx1 + dist - 1;
 
             // sum of [indx1 to indx2]
-            int sum = prefix_sum[indx2] - prefix_sum[indx1 - 1];
+            long sum = prefix_sum[indx2] - prefix_sum[indx1 - 1];
 
             // find minimum cost
             for (k = indx1; k < indx2; k++)
@@ -66,7 +67,7 @@ int main()
     int k, n, sum = 0;
     cin >> n >> k;
 
-    vector<int> arr(k, 0);
+    vector<int> arr(NUM, 0);
     for (int i = 0; i < k; i++)
         cin >> arr[i];
     // sort(arr.begin() + 1, arr.end());
