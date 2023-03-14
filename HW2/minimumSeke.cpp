@@ -10,8 +10,8 @@ using lint = long int;
 using lolint = long long int;
 using namespace std;
 typedef vector<vector<lolint>> Matrix;
-
-vector<int> nums(100000, 1000000);
+#define NUM 1000000
+vector<int> nums(NUM, NUM);
 
 lint find_min(int target, vector<lint> coins, int n)
 {
@@ -23,7 +23,7 @@ lint find_min(int target, vector<lint> coins, int n)
             if (coins[j] <= i)
             {
             int remainders_min = nums[i - coins[j]];
-            if (remainders_min != 1000000)
+            if (remainders_min != NUM)
                 if (remainders_min +1< nums[i])
                     nums[i] = remainders_min+1;
             }
@@ -41,7 +41,7 @@ int main()
         cin >> coins[i];
     sort(coins.begin(), coins.end(), greater<int>());
     lint res = find_min(v, coins, n);
-    if (res >= 0 && res!= 1000000)
+    if (res >= 0 && res!= NUM)
         cout << res << endl;
     else
         cout << -1 << endl;
