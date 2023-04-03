@@ -29,7 +29,8 @@ int main()
     float prices[n] = {0};
     float weights[n] = {0};
     float values[n] = {0.0};
-    item itemarr[n];
+    // item itemarr[n];
+    vector<item> itemarr(n);
     item temp_item ;
     for (int i = 0; i < n; i++)
         cin >> itemarr[i].price;
@@ -39,22 +40,7 @@ int main()
     for (int i = 0; i < n; i++)
         itemarr[i].value = itemarr[i].price / itemarr[i].weight;
 
-    // for (int i = 0; i < n; i++)
-    //     cout << values[i] << ' ' << prices[i]<<'|';
-
-    // for (int i = 0; i < n; i++)
-    // {
-    //     for (int j = i + 1; j < n; j++)
-    //     {
-    //         if (itemarr[i].value < itemarr[j].value | (itemarr[i].value == itemarr[j].value & itemarr[i].price > itemarr[j].price))
-    //         {
-    //             temp_item = itemarr[j];
-    //             itemarr[j] = itemarr[i];
-    //             itemarr[i] = temp_item;
-    //         }
-    //     }
-    // }
-    sort(itemarr , itemarr+n , comp);
+    sort(itemarr.begin() , itemarr.end() , comp);
     double max_gain = 0.0;
     for (int i = 0; i < n; i++)
     {
@@ -67,20 +53,10 @@ int main()
         {
             max_gain += ((double)itemarr[i].price * ((double)cap /(double) itemarr[i].weight));
             cap = 0;
-            // cout<<'$'<<(itemarr[i].price * (cap / itemarr[i].weight))<<endl;
         }
-        // if(cap == 0)
-        //     break;
-        // cout << max_gain << ' ' << cap << '*' << endl;
     }
-    // max_gain = ((lint)(max_gain* 100 + .5) / 100.0);
     cout << fixed << setprecision(2) << max_gain;
 
-    // for (int i = 0; i < n; i++)
-    //     cout << values[i] << ' ' << itemarr[i].price << '|';
-
-    // for (int i = 0; i < n; i++)
-    //     cout << itemarr[i].weight << ' ' << itemarr[i].price<<'|';
 
     return 0;
 }
