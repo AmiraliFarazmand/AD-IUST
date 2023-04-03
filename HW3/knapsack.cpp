@@ -10,9 +10,16 @@ using lolint = long long int;
 using namespace std;
 typedef vector<vector<int>> Matrix;
 
+typedef struct item
+{
+    int price;
+    int weight;
+    double value;
+} item;
 int main()
 {
-    lint cap, n, temp1, temp2, temp3;
+    lint cap, n;
+    double temp1, temp2, temp3;
     cin >> cap >> n;
     float prices[n] = {0};
     float weights[n] = {0};
@@ -32,7 +39,7 @@ int main()
     {
         for (int j = i + 1; j < n; j++)
         {
-            if (values[i] < values[j] | (values[i]==values[j]&prices[i]>prices[j]))
+            if (values[i] < values[j] | (values[i] == values[j] & prices[i] > prices[j]))
             {
                 temp1 = prices[i];
                 temp2 = weights[i];
@@ -65,7 +72,7 @@ int main()
         //     break;
         // cout << max_gain << ' ' << cap << '*' << endl;
     }
-    // max_gain = ((lint)(max_gain* 100 + .5) / 100.0); 
+    // max_gain = ((lint)(max_gain* 100 + .5) / 100.0);
     cout << fixed << setprecision(2) << max_gain;
 
     // for (int i = 0; i < n; i++)
