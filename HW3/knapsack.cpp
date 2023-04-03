@@ -12,7 +12,7 @@ typedef vector<vector<int>> Matrix;
 
 int main()
 {
-    int cap, n, temp1, temp2, temp3;
+    lint cap, n, temp1, temp2, temp3;
     cin >> cap >> n;
     float prices[n] = {0};
     float weights[n] = {0};
@@ -32,7 +32,7 @@ int main()
     {
         for (int j = i + 1; j < n; j++)
         {
-            if (values[i] < values[j] || (values[i]==values[j]&&prices[i]>prices[j]))
+            if (values[i] < values[j] | (values[i]==values[j]&prices[i]>prices[j]))
             {
                 temp1 = prices[i];
                 temp2 = weights[i];
@@ -47,7 +47,7 @@ int main()
         }
     }
 
-    float max_gain = 0;
+    double max_gain = 0;
     for (int i = 0; i < n; i++)
     {
         if (cap > weights[i])
@@ -65,8 +65,8 @@ int main()
         //     break;
         // cout << max_gain << ' ' << cap << '*' << endl;
     }
-    max_gain = ((int)(max_gain* 100 + .5) / 100.0); 
-    cout << max_gain << endl;
+    // max_gain = ((lint)(max_gain* 100 + .5) / 100.0); 
+    cout << fixed << setprecision(2) << max_gain;
 
     // for (int i = 0; i < n; i++)
     //     cout << values[i] << ' ' << prices[i] << '|';
