@@ -1,5 +1,5 @@
 /*
-2 5 7 
+2 5 7
 2 7
 >>>2
 */
@@ -36,7 +36,6 @@ int main()
     copy(std::istream_iterator<int>(iss2), std::istream_iterator<int>(), std::back_inserter(arr2));
 
     int len1 = arr.size(), len2 = arr2.size();
-    vector<vector<int>> memoize(len1 + 1, vector<int>(len2 + 1, -1));
-    cout << lcs(arr, arr2, len1, len2, memoize);
+
     return 0;
 }
