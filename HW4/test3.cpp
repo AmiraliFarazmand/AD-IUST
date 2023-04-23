@@ -1,117 +1,82 @@
-#include <iostream>
-#include <queue>
+// number of strongly connected components in a directed graph using Kosaraju's algorithm
+// Solved with using chat-gpt3.5
+#include <string>
 #include <vector>
+#include <queue>
+#include <sstream>
+#include <iterator>
+#include <bits/stdc++.h>
+#include <algorithm>
+#include <ctime>
+using lint = long int;
+using lolint = long long int;
 using namespace std;
- 
-// Data structure to store a graph edge
-struct Edge {
-    int src, dest;
-};
- 
-// A class to represent a graph object
-class Graph
+typedef vector<vector<int>> Matrix;
+
+const int MAXNUMBER = 10000;                              // maximum number of nodes
+vector<int> adj[MAXNUMBER], adj_transpose[MAXNUMBER];     // adjacency lists of the graph and its transpose
+int scc[MAXNUMBER], disc[MAXNUMBER], finished[MAXNUMBER]; // arrays used in Kosaraju's algorithm
+bool visited[MAXNUMBER];                                  // to keep track of visited nodes
+int scc_count = 0, disc_time = 0;                         // variables used to count SCCs
+
+void DFS1(int u)
 {
-public:
-    // a vector of vectors to represent an adjacency list
-    vector<vector<int>> adjList;
- 
-    // Graph Constructor
-    Graph(vector<Edge> const &edges, int n)
+    visited[u] = true;
+    for (int v : adj[u])
     {
-        // resize the vector to hold `n` elements of type `vector<int>`
-        adjList.resize(n);
- 
-        // add edges to the undirected graph
-        for (auto &edge: edges)
+        if (!visited[v])
         {
-            adjList[edge.src].push_back(edge.dest);
-            adjList[edge.dest].push_back(edge.src);
+            DFS1(v);
         }
     }
-};
- 
-// Perform BFS recursively on the graph
-void recursiveBFS(Graph const &graph, queue<int> &q, vector<bool> &discovered)
-{
-    if (q.empty()) {
-        return;
-    }
- 
-    // dequeue front node and print it
-    int v = q.front();
-    q.pop();
-    cout << v << " ";
- 
-    // do for every edge (v, u)
-    for (int u: graph.adjList[v])
-    {
-        if (!discovered[u])
-        {
-            // mark it as discovered and enqueue it
-            discovered[u] = true;
-            q.push(u);
-        }
-    }
- 
-    recursiveBFS(graph, q, discovered);
+    finished[++disc_time] = u;
 }
- 
+
+void DFS2(int u)
+{
+    visited[u] = true;
+    scc[u] = scc_count;
+    for (int v : adj_transpose[u])
+    {
+        if (!visited[v])
+        {
+            DFS2(v);
+        }
+    }
+}
+
 int main()
 {
-    // vector of graph edges as per the above diagram
-    // vector<Edge> edges = {
-    //     {1, 2}, {1, 3}, {1, 4}, {2, 5}, {2, 6}, {5, 9},
-    //     {5, 10}, {4, 7}, {4, 8}, {7, 11}, {7, 12}
-    //     // vertex 0, 13, and 14 are single nodes
-    // };
-  int v, e;
+    int v, e;
     cin >> v >> e;
-
-    // for (int i = 0; i < v; i++)
-    // {
-    //     is_visited[i + 1] = false;
-    // }
-    int start_node;
-    cin >> start_node;
-    // total number of nodes in the graph (labelled from 0 to 14)
-    // int n = 15;
- 
-    vector<Edge> edges;
     for (int i = 0; i < e; i++)
     {
-        int node1, node2;
-        cin >> node1 >> node2;
-        Edge tempEdge;
-        tempEdge.src = node1;
-        tempEdge.dest = node2;
-        edges.push_back(tempEdge);
+        int u, v;
+        cin >> u >> v;
+        adj[u].push_back(v);
+        adj_transpose[v].push_back(u);
     }
-    // build a graph from the given edges
-    Graph graph(edges, v);
- 
-    // to keep track of whether a vertex is discovered or not
-    vector<bool> discovered(v, false);
- 
-    // create a queue for doing BFS
-    queue<int> q;
-    q.push(start_node);
-    recursiveBFS(graph, q, discovered);
-    // Perform BFS traversal from all undiscovered nodes to
-    // cover all connected components of a graph
-    // for (int i = 0; i < n; i++)
-    // {
-    //     if (discovered[i] == false)
-    //     {
-    //         // mark the source vertex as discovered
-    //         discovered[i] = true;
- 
-    //         // enqueue source vertex
-    //         q.push(i);
- 
-    //         // start BFS traversal from vertex `i`
-    //         recursiveBFS(graph, q, discovered);
-    //     }
-    // }
- 
+    for (int i = 1; i <= v; i++)
+    {
+        if (!visited[i])
+        {
+            DFS1(i);
+        }
+    }
+    fill(visited, visited + v + 1, false);
+    for (int i = v; i >= 1; i--)
+    {
+        int u = finished[i];
+        if (!visited[u])
+        {
+            scc_count++;
+            DFS2(u);
+        }
+    }
+    // cout << scc_count << endl;
+    if (scc_count<=1)
+        cout<<"Yes";
+    else
+        cout<<"No";
     return 0;
 }
