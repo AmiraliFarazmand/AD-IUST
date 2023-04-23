@@ -1,8 +1,8 @@
-    // Recursive recurciveBFS implementation
+// Recursive iterativeBFS implementation
 // learnt about the problem in https://www.techiedelight.com/breadth-first-search/
 #include <string>
 #include <vector>
-#include <queue> 
+#include <queue>
 #include <sstream>
 #include <iterator>
 #include <bits/stdc++.h>
@@ -13,28 +13,35 @@ using namespace std;
 typedef vector<vector<int>> Matrix;
 
 vector<int> neighbours_vector[99999];
-bool is_visited[99999];
 
-void recurciveBFS(queue<int> q, vector<bool> visited)
+void iterativeBFS( int start_node, int v)
 {
-    if (q.empty())
-        return;
-    int node = q.front();
-    q.pop();
-    cout << node << endl;
-    // is_visited[node] = true;
-    // for (int n : neighbours_vector[node])
-    // {
-    //     if (!is_visited[n])
-    //         recurciveBFS(n);
-    // }
-    for (int n:neighbours_vector[node]){
-        if (!visited[n]){
-            visited[n] = true;
-            q.push(n);
+    queue<int> q;
+    vector<bool> visited(v + 1, false);
+
+    // if (q.empty())
+    //     return;
+    // int node = q.front();
+    // q.pop();
+    // cout << node << endl;
+    q.push(start_node);
+    visited[start_node] = true;
+    while (!q.empty())
+    {
+        int node = q.front();
+        q.pop();
+        cout << node << endl;
+        for (int n : neighbours_vector[node])
+        {
+            if (!visited[n])
+            {
+                visited[n] = true;
+                q.push(n);
+            }
         }
     }
-    recurciveBFS(q, visited);
+    // cout << "***\n";
+    // iterativeBFS(q, visited);
 }
 
 int main()
@@ -42,10 +49,7 @@ int main()
     int v, e;
     cin >> v >> e;
 
-    for (int i = 0; i < v; i++)
-    {
-        is_visited[i + 1] = false;
-    }
+
     int start_node;
     cin >> start_node;
 
@@ -56,11 +60,10 @@ int main()
         neighbours_vector[node1].push_back(node2);
         neighbours_vector[node2].push_back(node1);
     }
-    vector<bool> visited(v+1, false);
-    queue<int> nodes_queue;
-    nodes_queue.push(start_node);
-    visited[start_node] = true;
-    recurciveBFS( nodes_queue, visited);
+    // queue<int> nodes_queue;
+    // nodes_queue.push(start_node);
+    // visited[start_node] = true;
+    iterativeBFS( start_node, v);
     return 0;
 }
 

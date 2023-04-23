@@ -16,8 +16,8 @@ bool is_visited[99999];
 
 void DFS(int node)
 {
-    cout << node << endl;
     is_visited[node] = true;
+    cout << node << endl;
     for (int n : neighbours_vector[node])
     {
         if (!is_visited[n])
@@ -29,13 +29,13 @@ int main()
 {
     int v, e;
     cin >> v >> e;
+    int start_node;
+    cin >> start_node;
 
     for (int i = 0; i < v; i++)
     {
         is_visited[i + 1] = false;
     }
-    int start_node;
-    cin >> start_node;
 
     for (int i = 0; i < e; i++)
     {
