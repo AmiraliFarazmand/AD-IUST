@@ -1,4 +1,4 @@
-// Singly connected graph 
+// Singly connected graph
 //  Used graph DS from techie delight website
 // I also may have used the code from previous problems
 #include <string>
@@ -24,38 +24,54 @@ public:
 
     Graph(vector<Edge> const &edges, int n)
     {
-        adjList.resize(n + 1);
+        adjList.resize(n);
 
         for (auto &edge : edges)
         {
             adjList[edge.src].push_back(edge.dest);
-            adjList[edge.dest].push_back(edge.src);
+            // adjList[edge.dest].push_back(edge.src);
         }
     }
 };
-void recursiveDFS(Graph const &graph, int node, vector<bool> &visisted, vector<int> &departure_time, int &time)
+void recursiveDFS(Graph const &graph, int node, vector<bool> &visited)
 {
-    visisted[node] = true;
-    time++;
+    visited[node] = true;
     for (int neighbour : graph.adjList[node])
     {
-        if (!visisted[neighbour])
+        if (!visited[neighbour])
         {
-            recursiveDFS(graph, neighbour, visisted, departure_time, time);
+            recursiveDFS(graph, neighbour, visited);
         }
     }
-    departure_time[time] = node;
-    time++;
+}
+
+bool is_singly_connected(Graph const &graph, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        vector<bool> visited(n);
+        recursiveDFS(graph, i, visited);
+        if (find(visited.begin(), visited.end(), false) != visited.end())
+        {
+            return false;
+        }
+        // if ((count(visited.begin(), visited.end(), false) > 0))
+        // {
+        //     // cout<<count(visited.begin(), visited.end(), false);
+        //     return false;
+        // }
+    }
+    return true;
 }
 
 int main()
 {
     int e, v;
-    cin >> e >> v;
+    cin >> v>>e;
     vector<Edge> edges;
-    Edge temp_edge;
     for (int i = 1; i <= e; i++)
     {
+        Edge temp_edge;
         int u, v;
         cin >> u >> v;
         temp_edge.src = u - 1;
@@ -64,6 +80,37 @@ int main()
     }
 
     Graph graph = Graph(edges, v);
-    // count_connected_components(graph, v);
+    bool res = is_singly_connected(graph, v);
+    if (res)
+        cout << "Yes";
+    else
+        cout << "No";
     return 0;
 }
+/*
+Example 1 :
+Input:
+2 4
+1 2
+2 3
+Output:
+YES
+19
+Example 2 :
+Input:
+4 4
+1 2
+2 3
+3 4
+4 2
+Output:
+YES
+Example 3 :
+Input:
+3 3
+1 2
+2 3
+1 3
+Output:
+NO
+*/

@@ -1,7 +1,8 @@
 // Recursive DFS implementation
-// using Graph DS and idea from https://gist.github.com/smihir031/8c9cb3ed3797ad3668a21ed983aa799c
+//  Used graph DS from techie delight website
 #include <string>
 #include <vector>
+#include <queue>
 #include <sstream>
 #include <iterator>
 #include <bits/stdc++.h>
@@ -10,18 +11,37 @@ using lint = long int;
 using lolint = long long int;
 using namespace std;
 typedef vector<vector<int>> Matrix;
-
-vector<int> neighbours_vector[99999];
-bool is_visited[99999];
-
-void DFS(int node)
+struct Edge
 {
-    is_visited[node] = true;
-    cout << node << endl;
-    for (int n : neighbours_vector[node])
+    int src, dest;
+};
+
+class Graph
+{
+public:
+    vector<vector<int>> adjList;
+
+    Graph(vector<Edge> const &edges, int n)
     {
-        if (!is_visited[n])
-            DFS(n);
+        adjList.resize(n + 1);
+
+        for (auto &edge : edges)
+        {
+            adjList[edge.src].push_back(edge.dest);
+            adjList[edge.dest].push_back(edge.src);
+        }
+    }
+};
+void recursiveDFS(Graph const &graph, int node, vector<bool> &visisted)
+{
+    visisted[node] = true;
+    cout << node << endl;
+    for (int neighbour : graph.adjList[node])
+    {
+        if (!visisted[neighbour])
+        {
+            recursiveDFS(graph, neighbour, visisted);
+        }
     }
 }
 
@@ -32,22 +52,21 @@ int main()
     int start_node;
     cin >> start_node;
 
-    for (int i = 0; i < v; i++)
-    {
-        is_visited[i + 1] = false;
-    }
-
+    vector<bool> is_visited(v, 0);
+    vector<Edge> edges;
     for (int i = 0; i < e; i++)
     {
+        Edge temp_edge;
         int node1, node2;
         cin >> node1 >> node2;
-        neighbours_vector[node1].push_back(node2);
-        neighbours_vector[node2].push_back(node1);
+        temp_edge.src = node1;
+        temp_edge.dest = node2;
+        edges.push_back(temp_edge);
     }
-    DFS(start_node);
+    Graph graph(edges, v);
+    recursiveDFS(graph, start_node, is_visited);
     return 0;
 }
-
 /*
 Input:
 4 3

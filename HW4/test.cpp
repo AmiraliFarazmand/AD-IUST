@@ -1,109 +1,99 @@
 #include <iostream>
 #include <vector>
+#include <algorithm>
 using namespace std;
-
+ 
 // Data structure to store a graph edge
-struct Edge
-{
-	int src, dest;
+struct Edge {
+    int src, dest;
 };
-
+ 
 // A class to represent a graph object
 class Graph
 {
 public:
-	// a vector of vectors to represent an adjacency list
-	vector<vector<int>> adjList;
-
-	// Graph Constructor
-	Graph(vector<Edge> const &edges, int n)
-	{
-		// resize the vector to hold `n` elements of type `vector<int>`
-		adjList.resize(n+1);
-
-		// add edges to the directed graph
-		for (auto &edge : edges)
-		{
-			adjList[edge.src].push_back(edge.dest);
-		}
-	}
+ 
+    // a vector of vectors to represent an adjacency list
+    vector<vector<int>> adjList;
+ 
+    // Graph Constructor
+    Graph(vector<Edge> const &edges, int n)
+    {
+        // resize the vector to hold `n` elements of type `vector<int>`
+        adjList.resize(n);
+ 
+        // add edges to the directed graph
+        for (auto &edge: edges) {
+            adjList[edge.src].push_back(edge.dest);
+        }
+    }
 };
-
-// Perform DFS on the graph and set the departure time of all
-// vertices of the graph
-void DFS(Graph const &graph, int v, vector<bool> &discovered, vector<int> &departure, int &time)
+ 
+// Function to perform DFS traversal on the graph on a graph
+void DFS(Graph const &graph, int v, vector<bool> &visited)
 {
-	// mark the current node as discovered
-	discovered[v] = true;
-
-	// set the arrival time of vertex `v`
-	time++;
-
-	// do for every edge (v, u)
-	for (int u : graph.adjList[v])
-	{
-		// if `u` is not yet discovered
-		if (!discovered[u])
-		{
-			DFS(graph, u, discovered, departure, time);
-		}
-	}
-
-	// ready to backtrack
-	// set departure time of vertex `v`
-	departure[time] = v;
-	time++;
+    // mark current node as visited
+    visited[v] = true;
+ 
+    // do for every edge (v, u)
+    for (int u: graph.adjList[v])
+    {
+        // `u` is not visited
+        if (!visited[u]) {
+            DFS(graph, u, visited);
+        }
+    }
 }
-
-// Function to perform a topological sort on a given DAG
-void doTopologicalSort(Graph const &graph, int n)
+ 
+// Function to check if the graph is strongly connected or not
+bool isStronglyConnected(Graph const &graph, int n)
 {
-	// departure[] stores the vertex number using departure time as an index
-	vector<int> departure(2 * n+2, -1);
-
-	/* If we had done it the other way around, i.e., fill the array
-	   with departure time using vertex number as an index, we would
-	   need to sort it later */
-
-	// to keep track of whether a vertex is discovered or not
-	vector<bool> discovered(n);
-	int time = 0;
-
-	// perform DFS on all undiscovered vertices
-	for (int i = 0; i < n; i++)
-	{
-		if (!discovered[i])
-		{
-			DFS(graph, i, discovered, departure, time);
-		}
-	}
-
-	// Print the vertices in order of their decreasing
-	// departure time in DFS, i.e., in topological order
-	for (int i = 2 * n - 1+2; i >= 0; i--)
-	{
-		if (departure[i] != -1)
-		{
-			cout << departure[i] << " ";
-		}
-	}
+    // do for every vertex
+    for (int i = 0; i < n; i++)
+    {
+        // to keep track of whether a vertex is visited or not
+        vector<bool> visited(n);
+ 
+        // start DFS from the first vertex
+        DFS(graph, i, visited);
+ 
+        // If DFS traversal doesn't visit all vertices,
+        // then the graph is not strongly connected
+        if (find(visited.begin(), visited.end(), false) != visited.end()) {
+            return false;
+        }
+    }
+ 
+    return true;
 }
-
+ 
 int main()
 {
-	// vector of graph edges as per the above diagram
-	vector<Edge> edges =
-		{
-			{3, 1}, {1, 2}, {4, 1}};
+    // vector of graph edges as per the above diagram
+      int e, v;
+    cin >> v>>e;
+    vector<Edge> edges;
+    Edge temp_edge;
+    for (int i = 1; i <= e; i++)
+    {
+        int u, v;
+        cin >> u >> v;
+        temp_edge.src = u - 1;
+        temp_edge.dest = v - 1;
+        edges.push_back(temp_edge);
+    }
 
-	// total number of nodes in the graph (labelled from 0 to 7)
-	int n = 4;
-
-	// build a graph from the given edges
-	Graph graph(edges, n);
-
-	// perform topological sort
-	doTopologicalSort(graph, n);
-
-	return 0;
-}
+    Graph graph = Graph(edges, v);;
+ 
+    // build a graph from the given edges
+    // Graph graph(edges, v);
+ 
+    // check if the graph is not strongly connected or not
+    if (isStronglyConnected(graph, v)) {
+        cout << "The graph is strongly connected";
+    }
+    else {
+        cout << "The graph is not strongly connected";
+    }
+ 
+    return 0;}
