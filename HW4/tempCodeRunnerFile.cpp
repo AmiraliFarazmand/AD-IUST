@@ -1,6 +1,5 @@
- 0; i < v; i++)
-    // {
-    //     if (discovered[i] == false) {
-    //         iterativeDFS(graph, i, discovered);
-    //     }
-    // }
+3
+4
+1 2
+4 1
+3 1

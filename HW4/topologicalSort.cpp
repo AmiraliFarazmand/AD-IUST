@@ -23,79 +23,87 @@ public:
 
     Graph(vector<Edge> const &edges, int n)
     {
-        adjList.resize(n+1);
+        adjList.resize(n + 1);
 
         for (auto &edge : edges)
         {
             adjList[edge.src].push_back(edge.dest);
-            adjList[edge.dest].push_back(edge.src);
         }
     }
 };
-
-bool is_reachable(int src, int dest, int v, Graph &graph)
+void recursiveDFS(Graph const &graph, int node, vector<bool> &visisted, vector<int> &departure_time, int &time)
 {
-    vector<bool> visited(v);
-    queue<int> q;
-    q.push(src);
-    visited[src] = true;
-    while (!q.empty())
+    visisted[node] = true;
+    time++;
+    for (int neighbour : graph.adjList[node])
     {
-        int node = q.front();
-        q.pop();
-        if (node == dest)
-            return 1;
-        for (int neighbour : graph.adjList[node])
+        if (!visisted[neighbour])
         {
-            if (!visited[neighbour])
-            {
-                visited[neighbour] = true;
-                q.push(neighbour);
-            }
+            recursiveDFS(graph, neighbour, visisted, departure_time, time);
         }
     }
-    return 0;
+    departure_time[time] = node;
+    time++;
 }
+void topological_sort(Graph const &graph, int n)
+{
+    // departure[] stores the vertex number using departure time as an index
+    vector<int> departure(2 * n, -1);
 
+    /* If we had done it the other way around, i.e., fill the array
+       with departure time using vertex number as an index, we would
+       need to sort it later */
+
+    // to keep track of whether a vertex is discovered or not
+    vector<bool> discovered(n);
+    int time = 0;
+
+    // perform DFS on all undiscovered vertices
+    for (int i = 0; i < n; i++)
+    {
+        if (!discovered[i])
+        {
+            recursiveDFS(graph, i, discovered, departure, time);
+        }
+    }
+
+    // Print the vertices in order of their decreasing
+    // departure time in DFS, i.e., in topological order
+    for (int i = 2 * n - 1; i >= 0; i--)
+    {
+        if (departure[i] != -1)
+        {
+            cout << departure[i] << " ";
+        }
+    }
+}
 int main()
 {
     int e, v;
-    cin >> v >> e;
-    int ali, reza;
-    cin >> ali >> reza;
+    cin >> e >> v;
     vector<Edge> edges;
     Edge temp_edge;
-    for (int i = 1; i <= v; i++)
+    for (int i = 1; i <= e; i++)
     {
-        int num = 0;
-        cin >> num;
-        for (int j = 0; j < num; j++)
-        {
-            int tempNode;
-            cin >> tempNode;
-            temp_edge.src = tempNode;
-            temp_edge.dest = i;
-            edges.push_back(temp_edge);
-        }
-    }
-    Graph graph = Graph(edges, v);
-    bool res = is_reachable(ali, reza, v, graph);
-    if (res)
-        cout << "YES" << endl;
-    else
-        cout << "NO" << endl;
 
+        int u, v;
+        cin >> u >> v;
+        temp_edge.src = u;
+        temp_edge.dest = v;
+        edges.push_back(temp_edge);
+    }
+
+    Graph graph = Graph(edges, v);
+
+    topological_sort(graph, v);
     return 0;
 }
 /*
-Input:
-4 3
-2 4
-2 2 3
-1 1
-2 1 4
-1 3
-Output:
-YES
+3
+4
+1 2
+4 1
+3 1
 
+>>>4 3 1 2
 */
