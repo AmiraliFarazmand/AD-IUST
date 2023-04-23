@@ -19,11 +19,6 @@ void iterativeBFS( int start_node, int v)
     queue<int> q;
     vector<bool> visited(v + 1, false);
 
-    // if (q.empty())
-    //     return;
-    // int node = q.front();
-    // q.pop();
-    // cout << node << endl;
     q.push(start_node);
     visited[start_node] = true;
     while (!q.empty())
@@ -40,8 +35,7 @@ void iterativeBFS( int start_node, int v)
             }
         }
     }
-    // cout << "***\n";
-    // iterativeBFS(q, visited);
+
 }
 
 int main()
