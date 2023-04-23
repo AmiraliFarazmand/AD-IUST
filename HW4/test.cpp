@@ -1,130 +1,109 @@
-// An Iterative C++ program to do DFS traversal from
-// a given source vertex. DFS(int s) traverses vertices
-// reachable from s.
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
 using namespace std;
 
-// This class represents a directed graph using adjacency
-// list representation
-class Graph
+// Data structure to store a graph edge
+struct Edge
 {
-	int V;			// No. of vertices
-	list<int> *adj; // adjacency lists
-public:
-	Graph(int V);				// Constructor
-	void addEdge(int v, int w); // to add an edge to graph
-	void DFS(int s);			// prints all vertices in DFS manner
-								// from a given source.
+	int src, dest;
 };
 
-Graph::Graph(int V)
+// A class to represent a graph object
+class Graph
 {
-	this->V = V;
-	adj = new list<int>[V];
-}
+public:
+	// a vector of vectors to represent an adjacency list
+	vector<vector<int>> adjList;
 
-void Graph::addEdge(int v, int w)
-{
-	adj[v].push_back(w); // Add w to v’s list.
-}
-
-// prints all not yet visited vertices reachable from s
-void Graph::DFS(int s)
-{
-	// Initially mark all vertices as not visited
-	vector<bool> visited(V, false);
-
-	// Create a stack for DFS
-	stack<int> stack;
-
-	// Push the current source node.
-	stack.push(s);
-
-	while (!stack.empty())
+	// Graph Constructor
+	Graph(vector<Edge> const &edges, int n)
 	{
-		// Pop a vertex from stack and print it
-		int s = stack.top();
-		stack.pop();
+		// resize the vector to hold `n` elements of type `vector<int>`
+		adjList.resize(n+1);
 
-		// Stack may contain same vertex twice. So
-		// we need to print the popped item only
-		// if it is not visited.
-		if (!visited[s])
+		// add edges to the directed graph
+		for (auto &edge : edges)
 		{
-			cout << s << endl;
-			visited[s] = true;
+			adjList[edge.src].push_back(edge.dest);
 		}
+	}
+};
 
-		// Get all adjacent vertices of the popped vertex s
-		// If a adjacent has not been visited, then push it
-		// to the stack.
-		for (auto i = adj[s].begin(); i != adj[s].end(); ++i)
-			if (!visited[*i])
-			{
+// Perform DFS on the graph and set the departure time of all
+// vertices of the graph
+void DFS(Graph const &graph, int v, vector<bool> &discovered, vector<int> &departure, int &time)
+{
+	// mark the current node as discovered
+	discovered[v] = true;
 
-				stack.push(*i);
-				cout << (*i);
-			}
+	// set the arrival time of vertex `v`
+	time++;
+
+	// do for every edge (v, u)
+	for (int u : graph.adjList[v])
+	{
+		// if `u` is not yet discovered
+		if (!discovered[u])
+		{
+			DFS(graph, u, discovered, departure, time);
+		}
+	}
+
+	// ready to backtrack
+	// set departure time of vertex `v`
+	departure[time] = v;
+	time++;
+}
+
+// Function to perform a topological sort on a given DAG
+void doTopologicalSort(Graph const &graph, int n)
+{
+	// departure[] stores the vertex number using departure time as an index
+	vector<int> departure(2 * n+2, -1);
+
+	/* If we had done it the other way around, i.e., fill the array
+	   with departure time using vertex number as an index, we would
+	   need to sort it later */
+
+	// to keep track of whether a vertex is discovered or not
+	vector<bool> discovered(n);
+	int time = 0;
+
+	// perform DFS on all undiscovered vertices
+	for (int i = 0; i < n; i++)
+	{
+		if (!discovered[i])
+		{
+			DFS(graph, i, discovered, departure, time);
+		}
+	}
+
+	// Print the vertices in order of their decreasing
+	// departure time in DFS, i.e., in topological order
+	for (int i = 2 * n - 1+2; i >= 0; i--)
+	{
+		if (departure[i] != -1)
+		{
+			cout << departure[i] << " ";
+		}
 	}
 }
 
-// Driver program to test methods of graph class
 int main()
 {
+	// vector of graph edges as per the above diagram
+	vector<Edge> edges =
+		{
+			{3, 1}, {1, 2}, {4, 1}};
 
-	int v, e;
-	cin >> v >> e;
-	Graph g(v); // Total 5 vertices in graph
+	// total number of nodes in the graph (labelled from 0 to 7)
+	int n = 4;
 
-	int start_node;
-	cin >> start_node;
+	// build a graph from the given edges
+	Graph graph(edges, n);
 
-	for (int i = 0; i < e; i++)
-	{
-		int node1, node2;
-		cin >> node1 >> node2;
-		g.addEdge(node1, node2);
-	}
-	cout << "Following is Depth First Traversal\n";
-	// g.addEdge(1, 0);
-	// g.addEdge(0, 2);
-	// g.addEdge(2, 1);
-	// g.addEdge(0, 3);
-	// g.addEdge(1, 4);
-
-	g.DFS(start_node);
+	// perform topological sort
+	doTopologicalSort(graph, n);
 
 	return 0;
 }
-/*
-Input:
-4 3
-1
-1 2
-1 3
-1 4
-Output:
-1
-2
-3
-4
-
-
-5 5
-0
-1 0
-0 2
-2 1
-0 3
-1 4
->>> 0 3 2 1 4
-
-
-5 4
-0
-1 0
-2 1
-3 4
-4 0
->>>0 1 2 3 4
-*/

@@ -1,5 +1,5 @@
-// Reachablity problem for graphs
-// Used graph DS from techie delight website
+// Topological Sort
+//  Used graph DS from techie delight website
 #include <string>
 #include <vector>
 #include <queue>
@@ -47,18 +47,10 @@ void recursiveDFS(Graph const &graph, int node, vector<bool> &visisted, vector<i
 }
 void topological_sort(Graph const &graph, int n)
 {
-    // departure[] stores the vertex number using departure time as an index
     vector<int> departure(2 * n, -1);
 
-    /* If we had done it the other way around, i.e., fill the array
-       with departure time using vertex number as an index, we would
-       need to sort it later */
-
-    // to keep track of whether a vertex is discovered or not
     vector<bool> discovered(n);
     int time = 0;
-
-    // perform DFS on all undiscovered vertices
     for (int i = 0; i < n; i++)
     {
         if (!discovered[i])
@@ -67,16 +59,15 @@ void topological_sort(Graph const &graph, int n)
         }
     }
 
-    // Print the vertices in order of their decreasing
-    // departure time in DFS, i.e., in topological order
     for (int i = 2 * n - 1; i >= 0; i--)
     {
         if (departure[i] != -1)
         {
-            cout << departure[i] << " ";
+            cout << departure[i] + 1 << " ";
         }
     }
 }
+
 int main()
 {
     int e, v;
@@ -88,8 +79,8 @@ int main()
 
         int u, v;
         cin >> u >> v;
-        temp_edge.src = u;
-        temp_edge.dest = v;
+        temp_edge.src = u - 1;
+        temp_edge.dest = v - 1;
         edges.push_back(temp_edge);
     }
 
