@@ -24,7 +24,9 @@ void IterativeDFS()
         // cout << node << endl;
         node_stack.pop();
         // cout<<node<<"##\n";
-        if (!is_visited[node])
+        if (is_visited[node])
+            continue;
+        else if (!is_visited[node])
         {
             cout << node << "\n";
             is_visited[node] = true;
@@ -35,7 +37,8 @@ void IterativeDFS()
 
         for (int n : neighbours_vector[node])
         {
-            if (!is_visited[n]){
+            if (!is_visited[n])
+            {
                 node_stack.push(n);
                 // cout<< n<<"*\n";
             }
@@ -47,21 +50,21 @@ int main()
 {
     int v, e;
     cin >> v >> e;
+    int start_node;
+    cin >> start_node;
+    node_stack.push(start_node);
 
     for (int i = 0; i < v; i++)
     {
         is_visited[i + 1] = false;
     }
-    int start_node;
-    cin >> start_node;
-    node_stack.push(start_node);
 
     for (int i = 0; i < e; i++)
     {
         int node1, node2;
         cin >> node1 >> node2;
         neighbours_vector[node1].push_back(node2);
-       neighbours_vector[node2].push_back(node1);
+        neighbours_vector[node2].push_back(node1);
     }
 
     IterativeDFS();

@@ -1,11 +1,6 @@
-10 10 1
-1 8
-1 10
-8 4
-8 7
-10 9
-4 3
-4 5
-7 6
-9 2
-9 3
+ 0; i < v; i++)
+    // {
+    //     if (discovered[i] == false) {
+    //         iterativeDFS(graph, i, discovered);
+    //     }
+    // }

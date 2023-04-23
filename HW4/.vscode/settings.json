@@ -21,10 +21,7 @@
   "C_Cpp_Runner.compilerArgs": [],
   "C_Cpp_Runner.linkerArgs": [],
   "C_Cpp_Runner.includePaths": [],
-  "C_Cpp_Runner.includeSearch": [
-    "*",
-    "**/*"
-  ],
+  "C_Cpp_Runner.includeSearch": ["*", "**/*"],
   "C_Cpp_Runner.excludeSearch": [
     "**/build",
     "**/build/**",
@@ -37,7 +34,8 @@
   "files.associations": {
     "*.ejs": "html",
     "iostream": "cpp",
-    "ostream": "cpp"
+    "ostream": "cpp",
+    "string": "cpp"
   },
   "C_Cpp_Runner.showCompilationTime": false
 }
