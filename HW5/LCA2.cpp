@@ -1,6 +1,17 @@
-#include <iostream>
-#include <list>
+// LCA
+//  Used graph DS from AlgoTree website 
+#include <string>
 #include <vector>
+#include <queue>
+#include <sstream>
+#include <iterator>
+#include <list>
+#include <bits/stdc++.h>
+#include <ctime>
+using lint = long int;
+using lolint = long long int;
+using namespace std;
+typedef vector<vector<int>> Matrix;
 
 using namespace std;
 
@@ -24,7 +35,7 @@ public:
         parentlist.resize(nodes + 1);
         visited.resize(nodes + 1);
         depth.resize(nodes + 1);
-        depth[0] = -1; // Hypothetical parent of root(1) is '0' at depth -1
+        depth[0] = -1;
     }
 
     ~Tree()
@@ -32,14 +43,13 @@ public:
         delete[] adjlist;
     }
 
-    void AddEdge(int src, int dst)
+    void add_edge(int src, int dst)
     {
         adjlist[src].push_back(dst);
         adjlist[dst].push_back(src);
     }
 
-    // Get parent of every node and find its depth
-    void GetParentAndDepth(int node, int parent)
+    void get_depths(int node, int parent)
     {
 
         depth[node] = depth[parent] + 1;
@@ -49,13 +59,12 @@ public:
             if (v != parent)
             {
                 parentlist[v] = node;
-                GetParentAndDepth(v, node);
+                get_depths(v, node);
             }
         }
     }
 
-    // Consider node_b at greater depth. Move node_b a level closer to node_a which is higher up till both nodes become equal.
-    int GetLCA(int node_a, int node_b)
+    int findLCA(int node_a, int node_b)
     {
 
         while (node_a != node_b)
@@ -75,28 +84,20 @@ int main()
     int n, q;
     cin >> n >> q;
     Tree t(n);
-    for (int i = 2; i <= n ; i++)
+    for (int i = 2; i <= n; i++)
     {
         int parent;
         cin >> parent;
-        t.AddEdge(parent, i); // -1 shayad bekhad!!!!!
+        t.add_edge(parent, i); // -1 shayad bekhad!!!!!
     }
-    t.GetParentAndDepth(1,0);
-    // cout << "nadomne\n";
+    t.get_depths(1, 0);
     for (int k = 0; k < q; k++)
     {
         int u, v, res = 0;
         cin >> u >> v;
-        res = t.GetLCA(u, v);
+        res = t.findLCA(u, v);
         cout << res << endl;
     }
-    // Root node '1' does not have any parent; so set it to 0
-    // t.GetParentAndDepth(1, 0);
-    // cout << "LCA of (10, 13) : " << t.GetLCA(10, 13) << endl;
-    // cout << "LCA of (7, 5)   : " << t.GetLCA(7, 5) << endl;
-    // cout << "LCA of (12, 9)  : " << t.GetLCA(12, 9) << endl;
-    // cout << "LCA of (19, 8)  : " << t.GetLCA(19, 8) << endl;
-    // cout << "LCA of (17, 18) : " << t.GetLCA(17, 18) << endl;
 
     return 0;
 }
