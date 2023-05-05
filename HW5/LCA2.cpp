@@ -38,11 +38,7 @@ public:
         depth[0] = -1;
     }
 
-    ~Tree()
-    {
-        delete[] adjlist;
-    }
-
+  
     void add_edge(int src, int dst)
     {
         adjlist[src].push_back(dst);
@@ -64,7 +60,7 @@ public:
         }
     }
 
-    int findLCA(int node_a, int node_b)
+    int find_LCA(int node_a, int node_b)
     {
 
         while (node_a != node_b)
@@ -95,7 +91,7 @@ int main()
     {
         int u, v, res = 0;
         cin >> u >> v;
-        res = t.findLCA(u, v);
+        res = t.find_LCA(u, v);
         cout << res << endl;
     }
 
