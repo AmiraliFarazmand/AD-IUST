@@ -1,4 +1,4 @@
-// Kruskal Algorithm
+// Prim's Algorithm
 //  Used Tree DS from AlgoTree website
 #include <iostream>
 #include <string>
@@ -18,8 +18,8 @@ typedef vector<vector<int>> Matrix;
 class Edge
 {
 public:
-    int node_start;
-    int node_end;
+    int src;
+    int dest;
     int weight;
 };
 
@@ -30,101 +30,102 @@ bool compWeight(const Edge a, const Edge b)
 
 class Graph
 {
-
-private:
-    int num_nodes;
-    vector<Edge> edgelist; 
-    vector<int> parent;
-    vector<int> rank;
-
 public:
-    Graph() {}
-    Graph(int num_nodes)
+    Graph(vector<Edge> const &edges, int V) : adjList(V)
     {
-        this->num_nodes = num_nodes;
-        parent.resize(num_nodes);
-        rank.resize(num_nodes);
-    }
-
-    void AddEdge(Edge e)
-    {
-        edgelist.push_back(e);
-    }
-
-    int FindParent(int node)
-    {
-
-        if (node != parent[node])
-            parent[node] = FindParent(parent[node]);
-        return parent[node];
-
-
-    }
-
-    void KruskalMST(vector<Edge> &result)
-    {
-
-        for (int i = 0; i < num_nodes; i++)
+        for (auto &edge : edges)
         {
-            parent[i] = i;
-            rank[i] = 0;
+            adjList[edge.src].push_back(edge.dest);
+            adjList[edge.dest].push_back(edge.src);
         }
-        sort(edgelist.begin(), edgelist.end(), compWeight);
+    }
 
-        for (Edge e : edgelist)
+    vector<vector<int>> adjList;
+};
+int last_node = 0;
+int max_length = 0;
+void recursiveDFS(Graph const &graph, int node, vector<bool> &visisted, int distance)
+{
+    visisted[node] = true;
+    if (max_length < distance)
+    {
+        max_length = distance;
+        last_node = node;
+    }
+    for (int neighbour : graph.adjList[node])
+    {
+        if (!visisted[neighbour])
         {
-            int root1 = FindParent(e.node_start);
-            int root2 = FindParent(e.node_end);
+            recursiveDFS(graph, neighbour, visisted, distance + 1);
+        }
+    }
+}
 
-            if (root1 != root2)
+void primMST(Graph const &graph, vector<Edge> &result, int v)
+{
+    int n = v;
+    vector<bool> visited(n + 1, false);
+    vector<Edge> availableEdges;
+    int visitedCount = 1;
+    int start_node = 0;
+    visited[start_node] = true;
+    availableEdges.insert(availableEdges.end(), graph.adjList[start_node].begin(), graph.adjList[start_node].end());
+    int weightCount = 0;
+    while (visitedCount < n)
+    {
+        visited[start_node] = true;
+        for (Edge e : availableEdges)
+        {
+            Edge edge = availableEdges.front();
+            availableEdges.erase(availableEdges.begin());
+            result.push_back(edge); 
+            int destNode = edge.dest;
+            weightCount += edge.weight;
+            if (visited[destNode] == false)
             {
-                result.push_back(e);
-                if (rank[root1] < rank[root2])
-                {
-                    parent[root1] = root2;
-                    rank[root2]++;
-                }
-                else
-                {
-                    parent[root2] = root1;
-                    rank[root1]++;
-                }
+                visited[destNode] = true;
+                visitedCount++;
+                // availableEdges.push_back(e);
+                availableEdges.insert(availableEdges.end(), graph.adjList[e.dest].begin(), graph.adjList[e.dest].end());
+                sort(availableEdges.begin(), availableEdges.end(), compWeight);
             }
         }
     }
-    void calculateSumEdges(vector<Edge> &edges)
-    {
+    cout<<weightCount<<endl;
+}
+void calculateSumEdges(vector<Edge> &edges)
+{
 
-        int cost = 0;
-        for (Edge e : edges)
-        {
-            cost += e.weight;
-        }
-        cout << cost << endl;
+    int cost = 0;
+    for (Edge e : edges)
+    {
+        cost += e.weight;
     }
+    cout << cost << endl;
 };
 
 int main()
 {
     int n, e;
     cin >> n >> e;
-    Graph t(n);
+    // Graph t();
+    vector<Edge> edgelist;
     for (int i = 1; i <= e; i++)
     {
         Edge tempEdge;
         int u, v, weight;
         cin >> u >> v >> weight;
-        tempEdge.node_start = u - 1;
-        tempEdge.node_end = v - 1;
+        tempEdge.src = u - 1;
+        tempEdge.dest = v - 1;
         tempEdge.weight = weight;
-        t.AddEdge(tempEdge);
-        swap(tempEdge.node_start, tempEdge.node_end);
-        t.AddEdge(tempEdge);
+        edgelist.push_back(tempEdge);
+        // swap(tempEdge.src, tempEdge.dest);
+        // t.AddEdge(tempEdge);
     }
-
+    Graph(edgelist, n);
     vector<Edge> MST;
-    t.KruskalMST(MST);
-    t.calculateSumEdges(MST);
+    // t.KruskalMST(MST);
+    // t.calculateSumEdges(MST);
 
     return 0;
 }
