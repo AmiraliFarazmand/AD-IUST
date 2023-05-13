@@ -45,7 +45,7 @@ public:
         parent.resize(num_nodes);
         rank.resize(num_nodes);
     }
-
+    ~Graph() {}
     void AddEdge(Edge e)
     {
         edgelist.push_back(e);
@@ -101,6 +101,16 @@ public:
         // cout << cost << endl;
         return cost;
     }
+    void  DisplayEdges (std :: vector<Edge>& mst) {
+
+    int cost = 0;
+    std :: cout << "Edges of minimum spanning tree : ";
+    for (auto& e : mst) {
+        std :: cout << "[" << e.node_start << "-" << e.node_end << "](" << e.weight << ")    ";
+        cost += e.weight;
+    }
+    std :: cout << "\nCost of minimum spanning tree : " << cost << std :: endl<<endl;
+}
 };
 
 int main()
@@ -111,8 +121,7 @@ int main()
     vector<int> destNodes(n);
     vector<int> golds(n);
     vector<int> silvers(n);
-    int minBarare = INFINITY;
-    Graph t(n);
+    int minBarare = INT_MAX;
     for (int i = 0; i < e; i++)
     {
         Edge tempEdge;
@@ -124,17 +133,46 @@ int main()
     {
         for (int j = 0; j < n; j++)
         {
-            int weight = golds[i] * G + silvers[i] * S;
-            
+            int weight = golds[i] * G + silvers[j] * S;
+            cout<<weight<<endl;
+            Graph t(n);
+
             for (int k = 0; k < e; k++)
             {
+                // if (golds[k] + silvers[k] < weight)
+                if (golds[k]<=golds[i] & silvers[k]<=silvers[j])
+                {
+                    Edge tempEdge;
+                    tempEdge.node_start = srcNodes[k];
+                    tempEdge.node_end = destNodes[k];
+                    tempEdge.weight = 0;
+                    t.AddEdge(tempEdge);
+                }
+                else
+                {
+                    Edge tempEdge;
+                    tempEdge.node_start = srcNodes[k];
+                    tempEdge.node_end = destNodes[k];
+                    tempEdge.weight = 1000;
+                    t.AddEdge(tempEdge);
+                }
             }
+                vector<Edge> MST;
+                t.KruskalMST(MST);
+                int sum = t.calculateSumEdges(MST);
+                if (weight< minBarare & sum == 0)
+                {
+                    minBarare = weight;
+                    t.DisplayEdges(MST);
+                }
+                t.~Graph();
         }
     }
-    vector<Edge> MST;
-    t.KruskalMST(MST);
-    t.calculateSumEdges(MST);
-
+    // vector<Edge> MST;
+    // t.KruskalMST(MST);
+    // t.calculateSumEdges(MST);
+    cout << minBarare 
+                    <<"***"<< endl;
     return 0;
 }
 /*
