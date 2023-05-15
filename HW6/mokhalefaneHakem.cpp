@@ -20,7 +20,7 @@ class Edge
 public:
     int node_start;
     int node_end;
-    lint weight;
+    int weight;
 };
 
 bool compWeight(const Edge a, const Edge b)
@@ -118,33 +118,34 @@ public:
 
 int main()
 {
-    lint n, e, G, S;
-    cin >> n >> e >> G >> S;
+    int n, e, G, S;
+    cin >> e >> n >> G >> S;
     vector<int> srcNodes(n);
     vector<int> destNodes(n);
-    vector<lint> golds(n);
-    vector<lint> silvers(n);
+    vector<int> golds(n);
+    vector<int> silvers(n);
     int minBarare = 200000000;
-    for (lint i = 0; i < e; i++)
+    for (int i = 0; i < e; i++)
     {
         Edge tempEdge;
         // int u, v, weight,gold,silver;
         // cin >> u >> v >> gold>>silver;
         cin >> srcNodes[i] >> destNodes[i] >> golds[i] >> silvers[i];
     }
-    // cout << 30;
+    // cout << -1;
     // return 1;
-    for (lint i = 0; i < n; i++)
+    for (int i = 0; i < n; i++)
     {
-        for (lint j = 0; j < n; j++)
+        for (int j = 0; j < n; j++)
         {
-            lint weight = golds[i] * G + silvers[j] * S;
-            cout << weight << endl;
+            int weight = golds[i] * G + silvers[j] * S;
+            // cout << weight << endl;
             Graph t(n);
 
             if (weight < minBarare)
             {
-                for (lint k = 0; k < e; k++)
+                bool should_brake = false;
+                for (lint k = 0; k < e ; k++)
                 {
                     // if (golds[k] + silvers[k] < weight)
                     if (golds[k] <= golds[i] & silvers[k] <= silvers[j])
@@ -160,32 +161,40 @@ int main()
                         Edge tempEdge;
                         tempEdge.node_start = srcNodes[k] - 1;
                         tempEdge.node_end = destNodes[k] - 1;
-                        tempEdge.weight = 1000;
+                        tempEdge.weight = 100000;
                         t.AddEdge(tempEdge);
+                        // break;
+                        // continue;
+                        // should_brake = true;
                     }
                 }
+                // if (should_brake)
+                // {
+                //     break;
+                // }
                 vector<Edge> MST;
                 t.KruskalMST(MST);
                 int sum = t.calculateSumEdges(MST);
                 if (sum == 0)
                 {
                     minBarare = weight;
-                    t.DisplayEdges(MST);
+                    // t.DisplayEdges(MST);
                 }
                 t.~Graph();
+                MST.clear();
             }
         }
     }
     // vector<Edge> MST;
     // t.KruskalMST(MST);
     // t.calculateSumEdges(MST);
-    if (minBarare == 200000000)
+    if (minBarare >=100000)
     {
         cout << -1 << endl;
         return 0;
     }
-    cout << minBarare
-         << "***" << endl;
+    cout << minBarare;
+        //  << "***" << endl;
     return 0;
 }
 /*
