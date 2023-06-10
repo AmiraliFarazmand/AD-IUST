@@ -1,5 +1,3 @@
-// Find minimum s-t cut in a flow network problem
-// used chatGPT and https://www.geeksforgeeks.org/minimum-cut-in-a-directed-graph/
 #include <iostream>
 #include <vector>
 #include <limits.h>
@@ -104,23 +102,3 @@ int main() {
 
     return 0;
 }
-
-/*
-Example 1 :
-Input :
-5
-0
-4
-0 2 5
-0 3 3
-2 3 3
-2 1 3
-2 4 3
-3 1 5
-1 4 4
-2 4 3
--1
-Output :
-1 - 4
-2 - 4
-*/
